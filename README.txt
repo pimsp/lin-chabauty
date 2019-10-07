@@ -1,3 +1,7 @@
+This code is mainly from Nicolas Mascot, and some code was added by Pim Spelier. See the notes for that at the end.
+
+################################################################################
+
 This package computes Galois representations appearing in the Jacobian of a given curve C, given the char.poly. of the Frobenius at p for p a prime of good reduction of C. See my preprint "Hensel-lifting torsion points on Jacobians and Galois representations" (arXiv 1808.03939) for more information.
 
 It requires the branch "aurel-matmod-ZpXQ" of the Git version of PARI/GP, and the gcc compiler.
@@ -19,7 +23,9 @@ Nicolas Mascot, September 1, 2018; updated November 7, 2018.
 
 ################################################################################
 
-Comments were added by Pim Spelier. The code was mostly used for calculating with divisors modulo p^2.
+I added some comments to several .h-files. I also wrote some code for hyperelliptic curves in Hyper2RR.gp, with main accomplishments a function that computes the Abel Jacobimap C -> J, P -> P - infty_+ or P - infty_- for Z/p^eZ points of C, and a function that can compute, with some data given, an upper bound for the number bound affine rational points on C. This last function uses linear Chabauty with Edixhovens method, calculating with divisors in J(Z/p^2 Z) that reduce to 0 modulo p.
 
+For this, see the preprint coming out soon from Edixhoven and Lido.
 
+Pim Spelier
 Last updated 21 August, 2019
