@@ -23,9 +23,11 @@ Nicolas Mascot, September 1, 2018; updated November 7, 2018.
 
 ################################################################################
 
-I added some comments to several .h-files. I also wrote some code for hyperelliptic curves in Hyper2RR.gp, with main accomplishments a function that computes the Abel Jacobimap C -> J, P -> P - infty_+ or P - infty_- for Z/p^eZ points of C, and a function that can compute, with some data given, an upper bound for the number bound affine rational points on C. This last function uses linear Chabauty with Edixhovens method, calculating with divisors in J(Z/p^2 Z) that reduce to 0 modulo p.
+I added some comments to several .h-files. I also wrote some code for hyperelliptic curves in Hyper2RR.gp, with main accomplishments a function that computes the Abel Jacobimap C -> J, P -> P - infty_+ or P - infty_- for Z/p^eZ points of C, and a function that can compute, with some data given, an upper bound for the number of affine rational points on C. This last function uses linear Chabauty with Edixhovens method, calculating with divisors in J(Z/p^2 Z) that reduce to 0 modulo p.
 
-For this, see the preprint coming out soon from Edixhoven and Lido.
+There is an example in ExChabauty1.gp.
+
+For more on the calculations, see the preprint coming out soon from Edixhoven and Lido.
 
 Pim Spelier
-Last updated 21 August, 2019
+Last updated 10 October, 2019
