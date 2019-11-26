@@ -114,6 +114,8 @@ HyperPicInbedInf(J,P,flag)=
 Cinb(x,t) = Pol([x],t); 
 CinbP(x,t) = [Cinb(x[1],t),Cinb(x[2],t)]; 
 
+
+\\ This is previous code; it is replaced by HyperInbedJLocalChart(J,D)
 \\ Given D a divisor on J (J define modulo p^2) that is zero modulo p
 \\ and divisors D_i 
 \\ return a vector mu_1,...  with D = sum_i mu_i * D_i
@@ -148,6 +150,12 @@ HyperInbedJQzero(J,D,Ds)={
   	return(-1);
 }
 
+\\ There is an F_p linear map: J(Z/p^2 Z)_0 \to \F_p^k for some k >= g; evaluate D according to this map
+\\ This works in polynomial time! (See the PicChart function for more information)
+HyperInbedJLocalChart(J,D) = {
+	return (((PicChart(J,D,1) - PicChart(J,JgetW0(J),1))~)/Jgetp(J))
+}
+
 \\ Given a point P in C(Z/p Z), return a divisor generating {Q-P} where
 \\ Q ranges over the deformations of P
 HyperDeformGenDiv(J,P) = {
@@ -165,26 +173,25 @@ HyperDeformGenDiv(J,P) = {
 \\ deformations of p_i
 \\ And finally a list of points candidates in C(Z/pZ), determine for each P in candidates whether there's a unique Fp-linear combination
 \\ of D_1,...,D_r equal to P_mu - P_nu for some deformations P_mu,P_nu of P
-HyperDeformLiftQ(J,bds,pts,candidates) = {
+HyperDeformLiftQ(J,bds,candidates) = {
 	\\ Note that first of all 0 is equal to P - P, so there's always at least one solution
 	\\ We have maps from F_p^r to F_p^g induced by the D_i's and a map from F_p to F_p^g given 
 	\\ by mu |-> P_mu - P
 	\\ There is exactly one solution iff the kernel of kappa: F_p^r + F_p to F_p^g is zero and
 
-	my(p,f,Ds,kappa);
+	my(p,f,T,kappa);
 
 	p = Jgetp(J); \\ the prime p
 	f = Jgetf(J); \\ the polynomial defining the curve C
-	
-	Ds = [HyperDeformGenDiv(J,Q) | Q <- pts];
+	T = JgetT(J);
 	
 	\\ We first construct the matrix corresponding to the map F_p^{r} to F_p^g; its columns are given
-	\\ by HyperInbedJQzero on the elements of DS
-	kappa = matconcat([HyperInbedJQzero(J,D,Ds)~ | D <- bds]);
+	\\ by HyperInbedJLocalChart on the elements of bds
+	kappa = matconcat([HyperInbedJLocalChart(J,D)~ | D <- bds]);
 	
 	\\ Then the matrix corresponding to the map F_p^r + F_p -> F_p^g is given by
 	\\ concatenating the column corresponding to HyperDeformGenDiv(J,P)
-	return([matsize(matkermod(matconcat([kappa,HyperInbedJQzero(J,HyperDeformGenDiv(J,P),Ds)~]),p))[2] == 0 | P <- candidates]);
+	return([matsize(matkerpadic(matconcat([kappa,HyperInbedJLocalChart(J,HyperDeformGenDiv(J,P))~]),T,p,1))[2] == 0 | P <- candidates]);
 	\\bds = concat(bds,[HyperDeformGenDiv(J,P)]);
 	\\return([kappa,matsize(matkermod(kappa,p))[2] == 0])
 }

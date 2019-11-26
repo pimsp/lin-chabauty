@@ -27,5 +27,9 @@ P = Z[1];
 Dc = PicSub(J,HyperPicInbedInf(J,P,1),HyperPicInbedInf(J,P,-1)); \\ = inf_+ - inf-
 
 Dc41 = PicMul(J,Dc,41,2); \\ 41*Dc. For some reason, the flag has to be 2
+W = Dc41;
+W0 = JgetW0(J);
+
+HyperDeformLiftQ(J,[Dc41],[b,c,[1,0]])
 
 \\print(HyperInbedJQzero(J,Dc41,[b,c]));
