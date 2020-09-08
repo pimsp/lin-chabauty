@@ -10,11 +10,9 @@ p = 5; \\ We choose to get it 5-adically
 e = 2; \\ Target p-adic accuracy is O(5^2)
 a = 3; \\ Degree of the unramified extension of Qp over which the relevant points are defined
 Lp = hyperellcharpoly(Mod(f,p)); \\ Local L factor of the curve at p, needed to know the number of points on the Jacobian mod p
-P1=[0,1];P2=[-3,1]; \\ We need TODO
-[f,g,d0,L,LL,L1,L2]=Hyper2RR(f,P1,P2); \\ Precomputation of a generic-enough equation of the curve and of some Ri
+[f,g,d0,L,LL]=Hyper2RR_2(f); \\ Precomputation of a generic-enough equation of the curve and of some Ri
 J=PicInit(f,g,d0,L,LL,1,p,a,e);
 print("Hyper2RR done");
-U=PicEvalInit(J,[L1,L2]);
 J1 = PicRed(J,1); \\ Reduction mod p
 
 T = JgetT(J);

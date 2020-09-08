@@ -6,7 +6,7 @@ read("galrep.gp");
 f = x^6+ 8*x^5+ 22*x^4+ 22*x^3+ 5*x^2+ 6*x+ 1; \\ Equation for the curve (must be smooth)
 print("C : y² = ",f);
 d = poldegree(f);
-p = 5; \\ We choose to get it 5-adically
+p = 11; \\ We choose to get it 5-adically
 e = 2; \\ Target p-adic accuracy is O(5^2)
 a = 3; \\ Degree of the unramified extension of Qp over which the relevant points are defined
 Lp = hyperellcharpoly(Mod(f,p)); \\ Local L factor of the curve at p, needed to know the number of points on the Jacobian mod p
@@ -26,6 +26,10 @@ c = [-3,1];
 P = Z[1];
 Dc = PicSub(J,HyperPicInbedInf(J,P,1),HyperPicInbedInf(J,P,-1)); \\ = inf_+ - inf-
 
-Dc41 = PicMul(J,Dc,41,2); \\ 41*Dc. For some reason, the flag has to be 2
+Dc25 = PicMul(J,Dc,25,2); \\ 25*Dc. For some reason, the flag has to be 2
+W = Dc25;
+W0 = JgetW0(J);
 
-\\print(HyperInbedJQzero(J,Dc41,[b,c]));
+HyperDeformLiftQ(J,[Dc25],[b,c])
+
+\\print(HyperInbedJQzero(J,Dc25,[b,c]));

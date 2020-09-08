@@ -37,6 +37,25 @@ Hyper2RR(f0,P1,P2)= /* y^2=f0(x). P1,P2 rat pts, not conjugate by hyper invol. *
 	[y^2-f,g,d0,L,LL,L1,L2];
 }
 
+Hyper2RR_2(f0)= /* y^2=f0(x). */
+{
+	my(f,g,d0,L,LL);
+	f = subst(f0,variable(f0),'x);
+	d0 = poldegree(f);
+	if(poldegree(f)%2,
+		while(polcoef(f,0)==0,
+			f=subst(f,x,x+1);
+		);
+		f='x*polrecip(f);
+		d0 += 1;
+	);
+	print(f);
+	g=(d0-2)/2;
+	L=HyperRR(g+1,g,1,0);
+	LL=HyperRR(2*g+2,g,1,0);
+	[y^2-f,g,d0,L,LL];
+}
+
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 \\ From now on all code is by Pim Spelier                                     \\
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -175,9 +194,9 @@ HyperDeformGenDiv(J,P) = {
 \\ of D_1,...,D_r equal to P_mu - P_nu for some deformations P_mu,P_nu of P
 HyperDeformLiftQ(J,bds,candidates) = {
 	\\ Note that first of all 0 is equal to P - P, so there's always at least one solution
-	\\ We have maps from F_p^r to F_p^g induced by the D_i's and a map from F_p to F_p^g given 
+	\\ We have maps from F_p^r to F_p^k induced by the D_i's and a map from F_p to F_p^k given 
 	\\ by mu |-> P_mu - P
-	\\ There is exactly one solution iff the kernel of kappa: F_p^r + F_p to F_p^g is zero and
+	\\ There is exactly one solution iff the kernel of kappa: F_p^r + F_p to F_p^k is zero
 
 	my(p,f,T,kappa);
 
@@ -185,18 +204,14 @@ HyperDeformLiftQ(J,bds,candidates) = {
 	f = Jgetf(J); \\ the polynomial defining the curve C
 	T = JgetT(J);
 	
-	\\ We first construct the matrix corresponding to the map F_p^{r} to F_p^g; its columns are given
+	\\ We first construct the matrix corresponding to the map F_p^{r} to F_p^l; its columns are given
 	\\ by HyperInbedJLocalChart on the elements of bds
 	kappa = matconcat([HyperInbedJLocalChart(J,D)~ | D <- bds]);
 	
 	\\ Then the matrix corresponding to the map F_p^r + F_p -> F_p^g is given by
 	\\ concatenating the column corresponding to HyperDeformGenDiv(J,P)
+	print([matconcat([kappa,HyperInbedJLocalChart(J,HyperDeformGenDiv(J,P))~])| P <- candidates]);
 	return([matsize(matkerpadic(matconcat([kappa,HyperInbedJLocalChart(J,HyperDeformGenDiv(J,P))~]),T,p,1))[2] == 0 | P <- candidates]);
 	\\bds = concat(bds,[HyperDeformGenDiv(J,P)]);
 	\\return([kappa,matsize(matkermod(kappa,p))[2] == 0])
 }
-
-
-\\ Given two points P,Q in C(Z/pZ) with Q coming from a Z-point, determine
-\\ whether P-Q in J(Z/pZ) lies in the image of J(Z) 
-\\ TODO: determine how this function should work without bruteforcing
